@@ -5,6 +5,7 @@ dataset_stats.pkl
 result*.json
 results/
 rollout*.mp4
+submission_artifacts/T2/*.tar.gz
 
 # 训练数据(选手自采产物,不入库)
 data/
