@@ -1,17 +1,26 @@
 # T2 submission artifact
 
-GitHub does not allow a public fork to upload new Git LFS objects. The source
-code and normalization statistics are stored in Git; the selected checkpoint
-is distributed separately as the GitHub Release asset:
+GitHub does not allow a public fork to upload new Git LFS objects. The selected
+checkpoint archive is therefore stored as four regular Git files, each below
+GitHub's 100 MB per-file limit:
 
 ```text
-t2-grab_roller-policy_best.tar.gz
+t2-grab_roller-policy_best.tar.gz.part-00
+t2-grab_roller-policy_best.tar.gz.part-01
+t2-grab_roller-policy_best.tar.gz.part-02
+t2-grab_roller-policy_best.tar.gz.part-03
 ```
 
-Extract the release asset from the repository root:
+After pulling the repository, verify, join, and extract from the repository root:
 
 ```bash
-tar -xzf /path/to/t2-grab_roller-policy_best.tar.gz
+(
+  cd submission_artifacts/T2
+  sha256sum -c SHA256SUMS.parts
+  cat t2-grab_roller-policy_best.tar.gz.part-* > t2-grab_roller-policy_best.tar.gz
+  echo "b00492c92c45437b8b8425aa4c540f86ee908609341b5dd559d4dfa85ee6811f  t2-grab_roller-policy_best.tar.gz" | sha256sum -c -
+)
+tar -xzf submission_artifacts/T2/t2-grab_roller-policy_best.tar.gz
 ```
 
 Expected SHA-256:
