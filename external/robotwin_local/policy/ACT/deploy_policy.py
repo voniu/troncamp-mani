@@ -11,10 +11,17 @@ from .act_policy import ACT
 import copy
 from argparse import Namespace
 
-def encode_obs(observation):
+def encode_obs(observation, input_bgr=False):
     head_cam = cv2.resize(observation["observation"]["head_camera"]["rgb"], (640, 480), interpolation=cv2.INTER_LINEAR)
     left_cam = cv2.resize(observation["observation"]["left_camera"]["rgb"], (640, 480), interpolation=cv2.INTER_LINEAR)
     right_cam = cv2.resize(observation["observation"]["right_camera"]["rgb"], (640, 480), interpolation=cv2.INTER_LINEAR)
+    # Training data is decoded by cv2.IMREAD_COLOR and therefore reaches ACT as
+    # BGR. RoboTwin observations are RGB, so optionally restore the training
+    # channel convention at deployment.
+    if input_bgr:
+        head_cam = head_cam[..., ::-1].copy()
+        left_cam = left_cam[..., ::-1].copy()
+        right_cam = right_cam[..., ::-1].copy()
     head_cam = np.moveaxis(head_cam, -1, 0) / 255.0
     left_cam = np.moveaxis(left_cam, -1, 0) / 255.0
     right_cam = np.moveaxis(right_cam, -1, 0) / 255.0
@@ -32,7 +39,7 @@ def get_model(usr_args):
 
 
 def eval(TASK_ENV, model, observation):
-    obs = encode_obs(observation)
+    obs = encode_obs(observation, getattr(model, "input_bgr", False))
     # instruction = TASK_ENV.get_instruction()
 
     # Get action from model

@@ -118,6 +118,7 @@ class ACT:
         self.num_queries = args_override["chunk_size"]
         self.state_dim = RoboTwin_Config.action_dim  # Standard joint dimension for bimanual robot
         self.max_timesteps = 3000  # Large enough for deployment
+        self.input_bgr = bool(args_override.get("input_bgr", False))
 
         # Set query frequency based on temporal_agg - matching imitate_episodes.py logic
         self.query_frequency = self.num_queries

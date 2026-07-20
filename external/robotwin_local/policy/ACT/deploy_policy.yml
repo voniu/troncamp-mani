@@ -13,6 +13,9 @@ chunk_size: 50
 hidden_dim: 512
 dim_feedforward: 3200
 temporal_agg: false 
+# process_data.py/OpenCV stores and decodes training images as BGR, while
+# RoboTwin's live camera observations are RGB. Match the training convention.
+input_bgr: true
 device: cuda:0
 
 # DETR parser args
